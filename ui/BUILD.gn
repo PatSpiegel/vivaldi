@@ -1,0 +1,58 @@
+import("//build/config/jumbo.gni")
+
+jumbo_static_library("ui") {
+  sources = [
+    "views/vivaldi_pin_shortcut.cpp",
+    "views/vivaldi_pin_shortcut.h",
+    "webgui/notes_ui.cpp",
+    "webgui/notes_ui.h",
+    "webgui/vivaldi_web_ui_controller_factory.cpp",
+    "webgui/vivaldi_web_ui_controller_factory.h",
+  ]
+  if (is_win) {
+    sources += [
+      "lights/razer_chroma_platform_driver_win.cc",
+      "lights/razer_chroma_platform_driver_win.h",
+    ]
+  }
+  public_configs = [ "//third_party/protobuf:using_proto" ]
+  deps = [
+    "//base:base",
+    "//components/translate/content/browser",
+    "//content/public/browser",
+    "//vivaldi/prefs:prefs_files_generator",
+    "//skia",
+  ]
+  if (!is_android) {
+    sources += [
+      "lazy_load_service_factory.cc",
+      "lazy_load_service_factory.h",
+      "lazy_load_service.cc",
+      "lazy_load_service.h",
+      "devtools/devtools_connector.cc",
+      "devtools/devtools_connector.h",
+      "lights/razer_chroma_handler.cc",
+      "lights/razer_chroma_handler.h",
+    ]
+    deps += [
+      "//chrome/browser/extensions:extensions",
+      "//vivaldi/extensions/schema"
+    ]
+  }
+  if (is_mac) {
+    sources += [
+      "vivaldi_bookmark_menu_mac.h",
+      "vivaldi_bookmark_menu_mac.mm",
+    ]
+  }
+}
+
+static_library("skia_utils") {
+  deps = [
+    "//skia:skia",
+  ]
+  sources = [
+    "vivaldi_skia_utils.cc",
+    "vivaldi_skia_utils.h",
+  ]
+}
